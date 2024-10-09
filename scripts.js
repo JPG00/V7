@@ -49,54 +49,80 @@ function split(str, separator = ' ') {
 // Grunnföll sem skilgreina á
 
 function longest(str) {
-  // Útfæra
+  if (!isString(str)) return null;
+  if (str.trim() === '') return '';
+
+  const words = split(str);
+  return words.reduce((longestWord, currentWord) =>
+    currentWord.length > longestWord.length ? currentWord : longestWord, ''
+  );
 }
 
 function shortest(str) {
-  // Útfæra
+  if (!isString(str)) return null;
+  if (str.trim() === '') return '';
+
+  const words = split(str);
+  return words.reduce((shortestWord, currentWord) =>
+    currentWord.length < shortestWord.length ? currentWord : shortestWord, words[0]
+  );
 }
 
 function reverse(str) {
-  if (isString(str)) {
-  const split = str.split('');
-  const reversed = split.reverse()
-
-  console.log(split)
-
-  return reversed.join('')
-  }
-  return null;
+  if (!isString(str)) return null;
+  return str.split('').reverse().join('');
 }
-console.assert(
-  reverse('Halló') === 'óllah', 
-  'reverse: snýr við einföldum strengi'
-);
-
-console.assert(
-  reverse(false) === null, 
-  'reverse: ef ekki strengur, skila null'
-);
-
-console.assert(
-  
-);
-
 
 function palindrome(str) {
-  // Útfæra
+  if (!isString(str) || str.trim() === '') return false;
+
+  const normalized = str.replace(/[\s.,!?]/g, '').toLowerCase();
+  return normalized === reverse(normalized);
 }
 
 function vowels(str) {
-  // Útfæra
+  if (!isString(str)) return 0;
+
+  const chars = str.toLowerCase().split('');
+  return chars.filter(char => VOWELS.includes(char)).length;
 }
 
 function consonants(str) {
-  // Útfæra
+  if (!isString(str)) return 0;
+
+  const chars = str.toLowerCase().split('');
+  return chars.filter(char => CONSONANTS.includes(char)).length;
 }
 
 //------------------------------------------------------------------------------
 // Leiðbeint ferli
 
 function start() {
-  // Útfæra
+  alert('Velkomin/n í strengjavinnslu forrit!\nSláðu inn streng til að fá upplýsingar.');
+  const input = prompt('Sláðu inn streng:');
+
+  if (input === null || input.trim() === '') return;
+
+  const longestWord = longest(input);
+  const shortestWord = shortest(input);
+  const reversed = reverse(input);
+  const vowelCount = vowels(input);
+  const consonantCount = consonants(input);
+  const isPalindrome = palindrome(input);
+
+  alert(
+    `Niðurstöður fyrir strenginn "${input}":
+    Lengsta orð: ${longestWord}
+    Stysta orð: ${shortestWord}
+    Öfugur strengur: ${reversed}
+    Fjöldi sérhljóða: ${vowelCount}
+    Fjöldi samhljóða: ${consonantCount}
+    Er palindrome: ${isPalindrome ? 'Já' : 'Nei'}`
+  );
+
+  if (confirm('Viltu prófa annan streng?')) {
+    start();
+  }
 }
+
+start();
