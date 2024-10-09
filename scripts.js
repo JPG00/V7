@@ -9,7 +9,7 @@
 // Fastar
 
 /** Íslenskir sérhljóðar */
-const CONSONANTS = 'bcdfghjklmnpqrstvwxz'.split('');
+const CONSONANTS = 'bcdfghjklmnpqrstvwxzþð'.split('');
 
 /** Íslenskir samhljóðar */
 const VOWELS = 'aeiouyáéýúíóöæ'.split('');
@@ -41,64 +41,192 @@ function split(str, separator = ' ') {
   if (!isString(str)) {
     return [];
   }
-
-  return str.split(separator);
+  const splitArray = str.split(separator);
+  console.log('split:', splitArray);
+  return splitArray;
 }
 
 //------------------------------------------------------------------------------
 // Grunnföll sem skilgreina á
+
 
 function longest(str) {
   if (!isString(str)) return null;
   if (str.trim() === '') return '';
 
   const words = split(str);
-  return words.reduce((longestWord, currentWord) =>
-    currentWord.length > longestWord.length ? currentWord : longestWord, ''
-  );
+  let longestWord = '';
+
+  for (const word of words) {
+    if (word.length > longestWord.length) {
+      longestWord = word;
+    }
+  }
+  console.log('longestWord:', longestWord);
+  return longestWord;
 }
+
+console.assert(
+  longest('Halló Heimur') === 'Heimur' // Velur lengsta orðið
+);
+console.assert(
+  longest('Það er sól') === 'Það'
+);
+console.assert(
+  longest('') === ''
+);
+console.assert(
+  longest (123) === null
+);
+
+
+
 
 function shortest(str) {
   if (!isString(str)) return null;
   if (str.trim() === '') return '';
 
   const words = split(str);
-  return words.reduce((shortestWord, currentWord) =>
-    currentWord.length < shortestWord.length ? currentWord : shortestWord, words[0]
-  );
+  let shortestWord = words[0];
+
+  for (const word of words) {
+    if (word.length < shortestWord.length) {
+      shortestWord = word;
+    }
+  }
+  console.log('shortestWord:', shortestWord);
+  return shortestWord;
 }
 
+console.assert(
+  shortest('Halló Heimur') === 'Halló'
+);
+console.assert(
+  shortest('Það er sól') === 'er'
+);
+console.assert(
+  shortest('') === ''
+);
+console.assert(
+  shortest(123) === null
+);
+
+
+
+
 function reverse(str) {
-  if (!isString(str)) return null;
-  return str.split('').reverse().join('');
+  if (!isString(str)) {
+    return null;
+  }
+  const split = str.split('');
+  const reversed = split.reverse();
+
+  console.log('split:', split);
+  console.log('reversed:', reversed);
+
+  return reversed.join('');
+  
 }
+
+console.assert(
+  reverse('Halló heimur') === 'rumieh óllaH'
+);
+console.assert(
+  reverse('Það er sól') === 'lós re ðaÞ'
+);
+console.assert(
+  reverse('') === ''
+);
+console.assert(
+  reverse(123) === null
+);
+
+
+
 
 function palindrome(str) {
   if (!isString(str) || str.trim() === '') return false;
 
-  const normalized = str.replace(/[\s.,!?]/g, '').toLowerCase();
-  return normalized === reverse(normalized);
+  const normalized = str
+    .replace(/\s/g, '')
+    .replace(/\./g, '')
+    .replace(/,/g, '')
+    .replace(/!/g, '')
+    .replace(/\?/g, '')
+    .toLowerCase();
+
+  const reversed = reverse(normalized);
+
+  console.log('normalized:', normalized);
+  console.log('reversed:', reversed);
+
+  return normalized === reversed;
 }
+
+console.assert(
+  palindrome('abba') === true
+);
+console.assert(
+  palindrome('A man, a plan, a canal, Panama') === true
+);
+console.assert(
+  palindrome('halló') === false
+);
+console.assert(
+  palindrome('') === false
+);
+
+
+
 
 function vowels(str) {
   if (!isString(str)) return 0;
 
   const chars = str.toLowerCase().split('');
-  return chars.filter(char => VOWELS.includes(char)).length;
+  const vowelCount = chars.filter(char => VOWELS.includes(char)).length;
+
+  console.log('vowelCount:', vowelCount);
+  return vowelCount;
 }
+
+console.assert(
+  vowels('Halló Heimur') === 5
+);
+console.assert(
+  vowels('Það er sól') === 3
+);
+console.assert(
+  vowels(123) === 0
+);
+
+
+
 
 function consonants(str) {
   if (!isString(str)) return 0;
 
   const chars = str.toLowerCase().split('');
-  return chars.filter(char => CONSONANTS.includes(char)).length;
+  const consonantCount = chars.filter(char => CONSONANTS.includes(char)).length;
+
+  console.log('consonantCount:', consonantCount);
+  return consonantCount;
 }
+
+console.assert(
+  consonants('Halló Heimur') === 6
+);
+console.assert(
+  consonants('Það er sól') === 5
+);
+console.assert(
+  consonants(123) === 0
+);
 
 //------------------------------------------------------------------------------
 // Leiðbeint ferli
 
 function start() {
-  alert('Velkomin/n í strengjavinnslu forrit!\nSláðu inn streng til að fá upplýsingar.');
+  alert('Velkomin/n í þennan leik!\nSláðu inn streng(orð / setningu) til að fá skemmtilegar staðreyndir!');
   const input = prompt('Sláðu inn streng:');
 
   if (input === null || input.trim() === '') return;
@@ -110,6 +238,16 @@ function start() {
   const consonantCount = consonants(input);
   const isPalindrome = palindrome(input);
 
+  console.log('Niðurstöður:', {
+    input,
+    longestWord,
+    shortestWord,
+    reversed,
+    vowelCount,
+    consonantCount,
+    isPalindrome
+  });
+
   alert(
     `Niðurstöður fyrir strenginn "${input}":
     Lengsta orð: ${longestWord}
@@ -120,7 +258,7 @@ function start() {
     Er palindrome: ${isPalindrome ? 'Já' : 'Nei'}`
   );
 
-  if (confirm('Viltu prófa annan streng?')) {
+  if (confirm('Gera aftur?')) {
     start();
   }
 }
