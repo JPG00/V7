@@ -20,7 +20,7 @@ const VOWELS = 'aeiouyáéýúíóöæ'.split('');
 /**
  * Athuga hvort óþekkt gildi sé strengur eða ekki.
  * @param {unknown} str Óþekkt gildi sem athuga á hvort sé strengur.
- * @returns `true` ef `str` er strengur, annars `false`.
+ * @returns {boolean} `true` ef `str` er strengur, annars `false`.
  */
 // Skilgreinum anonymous fall og bindum við breytuna `isString`
 const isString = (str) => typeof str === 'string';
@@ -57,8 +57,30 @@ function shortest(str) {
 }
 
 function reverse(str) {
-  // Útfæra
+  if (isString(str)) {
+  const split = str.split('');
+  const reversed = split.reverse()
+
+  console.log(split)
+
+  return reversed.join('')
+  }
+  return null;
 }
+console.assert(
+  reverse('Halló') === 'óllah', 
+  'reverse: snýr við einföldum strengi'
+);
+
+console.assert(
+  reverse(false) === null, 
+  'reverse: ef ekki strengur, skila null'
+);
+
+console.assert(
+  
+);
+
 
 function palindrome(str) {
   // Útfæra
