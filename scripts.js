@@ -226,11 +226,17 @@ console.assert(
 // Leiðbeint ferli
 
 function start() {
-  alert('Velkomin/n í þennan leik!\nSláðu inn streng(orð / setningu) til að fá skemmtilegar staðreyndir!');
+  alert('Velkomin/n í þennan leik!\nSláðu inn streng til að fá skemmtilegar staðreyndir!');
   const input = prompt('Sláðu inn streng:');
 
-  if (input === null || input.trim() === '') return;
+if (input === null) {
+  return;
+}
 
+  if (input.trim() === '') {
+    alert('Strengur má ekki vera tómur');
+    start();
+  } else {
   const longestWord = longest(input);
   const shortestWord = shortest(input);
   const reversed = reverse(input);
@@ -257,10 +263,10 @@ function start() {
     Fjöldi samhljóða: ${consonantCount}
     Er palindrome: ${isPalindrome ? 'Já' : 'Nei'}`
   );
-
   if (confirm('Gera aftur?')) {
     start();
-  }
+  } else return;
+}
 }
 
 start();
